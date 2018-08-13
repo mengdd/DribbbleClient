@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbarLayout!!.toolbar
 
         setSupportActionBar(toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp)
         toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(Gravity.START) }
 
         showFragment(HomeFragment())
