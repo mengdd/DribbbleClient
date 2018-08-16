@@ -18,6 +18,7 @@ import com.ddmeng.dribbbleclient.data.remote.ApiConstants
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
 import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
+import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -27,6 +28,7 @@ class OAuthFragment : Fragment() {
     }
 
     private lateinit var webview: WebView
+    private lateinit var preferencesUtils: PreferencesUtils
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,6 +48,7 @@ class OAuthFragment : Fragment() {
 
 
         }
+        preferencesUtils = PreferencesUtils(activity?.application!!) // TODO: Ugly
         return binding.root
     }
 
@@ -68,7 +71,7 @@ class OAuthFragment : Fragment() {
 
     private fun saveToken(oauthToken: OAuthToken) {
         Log.i(TAG, "save Token: " + oauthToken.accessToken)
-
+        preferencesUtils.saveUserToken(oauthToken.accessToken)
     }
 
     private fun exit() {
