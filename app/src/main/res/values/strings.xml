@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">DribbbleClient</string>
     <string name="login">Login</string>
+    <string name="home">Home</string>
 </resources>
