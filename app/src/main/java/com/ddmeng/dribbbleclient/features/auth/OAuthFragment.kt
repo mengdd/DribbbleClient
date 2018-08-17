@@ -29,6 +29,7 @@ class OAuthFragment : Fragment() {
 
     private lateinit var webview: WebView
     private lateinit var preferencesUtils: PreferencesUtils
+    private lateinit var serviceGenerator: ServiceGenerator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,12 +50,14 @@ class OAuthFragment : Fragment() {
 
         }
         preferencesUtils = PreferencesUtils(activity?.application!!) // TODO: Ugly
+        serviceGenerator = ServiceGenerator(preferencesUtils)
         return binding.root
     }
 
     private fun getToken(code: String) {
         Log.i(TAG, "getToken with code: $code")
-        val oauthService: OAuthService = ServiceGenerator.createService(OAuthService::class.java)
+        serviceGenerator.changeBaseUrl(ServiceGenerator.OAUTH_BASE_URL) // TODO: lame, refactor with dagger
+        val oauthService: OAuthService = serviceGenerator.createService(OAuthService::class.java)
         oauthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET, code, BuildConfig.DRIBBBLE_CALLBACK_URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -71,6 +74,7 @@ class OAuthFragment : Fragment() {
 
     private fun saveToken(oauthToken: OAuthToken) {
         Log.i(TAG, "save Token: " + oauthToken.accessToken)
+        preferencesUtils.saveUserLoggedIn(true)
         preferencesUtils.saveUserToken(oauthToken.accessToken)
     }
 

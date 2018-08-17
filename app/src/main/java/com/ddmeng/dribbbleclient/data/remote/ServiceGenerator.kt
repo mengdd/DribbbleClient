@@ -1,21 +1,32 @@
 package com.ddmeng.dribbbleclient.data.remote
 
+import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-object ServiceGenerator {
+class ServiceGenerator constructor(preferencesUtils: PreferencesUtils) {
 
-    val OAUTH_BASE_URL = "https://dribbble.com/oauth/"
+    companion object {
+        const val OAUTH_BASE_URL = "https://dribbble.com/oauth/"
+        const val API_BASE_URL = "https://api.dribbble.com/v2/"
+    }
 
-    private val httpClientBuilder = OkHttpClient.Builder()
+    private val httpClientBuilder = OkHttpClient.Builder().addInterceptor(AuthInterceptor(preferencesUtils))
 
-    private val retrofitBuilder = Retrofit.Builder()
-            .baseUrl(OAUTH_BASE_URL)
+    private var retrofitBuilder = Retrofit.Builder()
+            .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+
+    fun changeBaseUrl(newBaseUrl: String) {
+        retrofitBuilder = Retrofit.Builder()
+                .baseUrl(newBaseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    }
 
     fun <S> createService(serviceClass: Class<S>): S {
         val client = httpClientBuilder.build()
@@ -23,3 +34,4 @@ object ServiceGenerator {
         return retrofit.create(serviceClass)
     }
 }
+
