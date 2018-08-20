@@ -1,5 +1,7 @@
 package com.ddmeng.dribbbleclient
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -7,21 +9,18 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
-import com.ddmeng.dribbbleclient.data.model.User
-import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
-import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.databinding.ActivityMainBinding
+import com.ddmeng.dribbbleclient.databinding.DrawerHeaderBinding
+import com.ddmeng.dribbbleclient.di.InjectorUtils
 import com.ddmeng.dribbbleclient.features.auth.OAuthFragment
 import com.ddmeng.dribbbleclient.features.home.HomeFragment
+import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.ddmeng.dribbbleclient.viewmodel.UserViewModel
 import kotlinx.android.synthetic.main.drawer_header.view.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,13 +30,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navigationView: NavigationView
     private lateinit var headerView: View
     private lateinit var loginButton: Button
-    private lateinit var userNameText: TextView
 
     private lateinit var preferencesUtils: PreferencesUtils
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferencesUtils = PreferencesUtils(application)
+        userViewModel = ViewModelProviders.of(this, InjectorUtils.provideUserViewModelFactory(this))
+                .get(UserViewModel::class.java)
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -45,8 +47,9 @@ class MainActivity : AppCompatActivity() {
         toolbar = binding.toolbarLayout!!.toolbar
         navigationView = binding.navigationView
         headerView = navigationView.getHeaderView(0)
+        drawerHeaderBinding = DrawerHeaderBinding.bind(headerView)
+
         loginButton = headerView.login_button
-        userNameText = headerView.user_name
         loginButton.setOnClickListener {
             startLogin()
             drawerLayout.closeDrawer(Gravity.START)
@@ -62,12 +65,18 @@ class MainActivity : AppCompatActivity() {
                     showHomeFragment()
                 }
                 else -> {
-                    Log.d("Main", "not supported yet")
+                    LogUtils.d("not supported yet")
                 }
             }
             drawerLayout.closeDrawer(Gravity.START)
             true // TODO why can't I use "return true" here?
         }
+
+        userViewModel.getUserInfo().observe(this, Observer { userResource ->
+            LogUtils.i("getUserInfo Observer onChanged: $userResource")
+            drawerHeaderBinding.user = userResource?.data
+            drawerHeaderBinding.userResource = userResource
+        })
 
         showHomeFragment()
     }
@@ -78,34 +87,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateLoginStatus() {
-        if (preferencesUtils.isUserLoggedIn) {
-            getUserInfo()
-
-        } else {
+        LogUtils.i("is User logged in ${preferencesUtils.isUserLoggedIn}")
+        if (!preferencesUtils.isUserLoggedIn) {
             loginButton.visibility = View.VISIBLE
+        } else {
+            loginButton.visibility = View.GONE
         }
     }
 
-    private fun getUserInfo() {
-        val serviceGenerator = ServiceGenerator(preferencesUtils)
-        serviceGenerator.changeBaseUrl(ServiceGenerator.API_BASE_URL)
-        val userService = serviceGenerator.createService(UserService::class.java)
-        userService.getUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ user: User ->
-                    loginButton.visibility = View.GONE
-                    populateUser(user)
-                }, {
-                    loginButton.visibility = View.VISIBLE
-                    Log.e("User", "get user info failed", it)
-                })
-
-    }
-
-    private fun populateUser(user: User) {
-        userNameText.text = user.name
-    }
 
     private fun startLogin() {
         val oAuthFragment = OAuthFragment()

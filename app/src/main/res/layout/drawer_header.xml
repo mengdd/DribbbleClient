@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.ddmeng.dribbbleclient.data.model.User" />
+
+        <variable
+            name="userResource"
+            type="com.ddmeng.dribbbleclient.data.valueobject.Resource" />
+
+    </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,10 +32,10 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{user.name}"
             app:layout_constraintLeft_toRightOf="@+id/account_icon"
             app:layout_constraintTop_toTopOf="parent"
-
-            android:text="User Name very very ....... very very long" />
+            app:visibleGone="@{user !=null}" />
 
         <Button
             android:id="@+id/login_button"
@@ -32,7 +43,8 @@
             android:layout_height="wrap_content"
             android:text="@string/login"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/account_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/account_icon"
+            app:visibleGone="@{user == null}" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

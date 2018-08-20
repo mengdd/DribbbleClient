@@ -1,8 +1,14 @@
 package com.ddmeng.dribbbleclient.data.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.TypeConverters
+import android.support.annotation.NonNull
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "user_table")
+@TypeConverters(DataTypeConverter::class)
 class User {
 
     @SerializedName("avatar_url")
@@ -23,12 +29,14 @@ class User {
     @SerializedName("html_url")
     @Expose
     var htmlUrl: String? = null
+    @PrimaryKey
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    @NonNull
+    var id: Int = 0
     @SerializedName("links")
     @Expose
-    var links: HashMap<String, String>? = null
+    var links: Map<String, String>? = null
     @SerializedName("location")
     @Expose
     var location: String? = null
@@ -46,6 +54,6 @@ class User {
     var type: String? = null
     @SerializedName("teams")
     @Expose
-    var teams: List<Any>? = null
+    var teams: List<String>? = null
 
 }

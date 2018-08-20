@@ -1,5 +1,6 @@
 package com.ddmeng.dribbbleclient.data.remote
 
+import com.ddmeng.dribbbleclient.utils.LiveDataCallAdapterFactory
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -20,12 +21,14 @@ class ServiceGenerator constructor(preferencesUtils: PreferencesUtils) {
             .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
 
     fun changeBaseUrl(newBaseUrl: String) {
         retrofitBuilder = Retrofit.Builder()
                 .baseUrl(newBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
     }
 
     fun <S> createService(serviceClass: Class<S>): S {
