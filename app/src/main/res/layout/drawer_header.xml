@@ -12,6 +12,10 @@
             name="userResource"
             type="com.ddmeng.dribbbleclient.data.valueobject.Resource" />
 
+        <variable
+            name="userViewModel"
+            type="com.ddmeng.dribbbleclient.viewmodel.UserViewModel" />
+
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -45,6 +49,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_icon"
             app:visibleGone="@{user == null}" />
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{(view) -> userViewModel.deleteUser(user)}"
+            android:text="@string/logout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+            app:visibleGone="@{user != null}" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

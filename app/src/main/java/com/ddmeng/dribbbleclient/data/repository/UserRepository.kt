@@ -6,6 +6,8 @@ import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 
 class UserRepository private constructor(
         private val appExecutors: AppExecutors,
@@ -34,5 +36,11 @@ class UserRepository private constructor(
 
             override fun createCall() = userService.getUser()
         }.asLiveData()
+    }
+
+    fun deleteUser(user: User) {
+        Completable.fromAction { userDao.delete(user) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 }

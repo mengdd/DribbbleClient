@@ -37,6 +37,6 @@ object InjectorUtils { // DI implemented manually
     }
 
     fun provideUserViewModelFactory(context: Context): UserViewModelFactory {
-        return UserViewModelFactory(provideUserRepository(context))
+        return UserViewModelFactory(provideUserRepository(context), providePreferencesUtils(context))
     }
 }

@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         navigationView = binding.navigationView
         headerView = navigationView.getHeaderView(0)
         drawerHeaderBinding = DrawerHeaderBinding.bind(headerView)
+        drawerHeaderBinding.userViewModel = userViewModel
 
         loginButton = headerView.login_button
         loginButton.setOnClickListener {
