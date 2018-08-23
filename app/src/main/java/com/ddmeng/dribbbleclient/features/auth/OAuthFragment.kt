@@ -17,15 +17,19 @@ import com.ddmeng.dribbbleclient.data.remote.ApiConstants
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
 import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
+import com.ddmeng.dribbbleclient.di.Injectable
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class OAuthFragment : Fragment() {
+class OAuthFragment : Fragment(), Injectable {
     private lateinit var webview: WebView
-    private lateinit var preferencesUtils: PreferencesUtils
-    private lateinit var serviceGenerator: ServiceGenerator
+    @Inject
+    lateinit var preferencesUtils: PreferencesUtils
+    @Inject
+    lateinit var serviceGenerator: ServiceGenerator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,8 +49,6 @@ class OAuthFragment : Fragment() {
 
 
         }
-        preferencesUtils = PreferencesUtils(activity?.application!!) // TODO: Ugly
-        serviceGenerator = ServiceGenerator(preferencesUtils)
         return binding.root
     }
 

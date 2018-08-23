@@ -15,15 +15,18 @@ import android.view.View
 import android.widget.Button
 import com.ddmeng.dribbbleclient.databinding.ActivityMainBinding
 import com.ddmeng.dribbbleclient.databinding.DrawerHeaderBinding
-import com.ddmeng.dribbbleclient.di.InjectorUtils
 import com.ddmeng.dribbbleclient.features.auth.OAuthFragment
 import com.ddmeng.dribbbleclient.features.home.HomeFragment
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.viewmodel.UserViewModel
+import com.ddmeng.dribbbleclient.viewmodel.UserViewModelFactory
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.drawer_header.view.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -31,14 +34,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var headerView: View
     private lateinit var loginButton: Button
 
-    private lateinit var preferencesUtils: PreferencesUtils
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var preferencesUtils: PreferencesUtils
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
     private lateinit var userViewModel: UserViewModel
     private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferencesUtils = PreferencesUtils(application)
-        userViewModel = ViewModelProviders.of(this, InjectorUtils.provideUserViewModelFactory(this))
+        userViewModel = ViewModelProviders.of(this, userViewModelFactory)
                 .get(UserViewModel::class.java)
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -82,6 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         showHomeFragment()
     }
+
+    override fun supportFragmentInjector() = dispatchingAndroidInjector
 
     fun showHomeFragment() {
         updateLoginStatus()
