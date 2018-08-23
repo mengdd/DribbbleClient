@@ -15,17 +15,20 @@ import com.ddmeng.dribbbleclient.R
 import com.ddmeng.dribbbleclient.data.model.OAuthToken
 import com.ddmeng.dribbbleclient.data.remote.ApiConstants
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
-import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
+import com.ddmeng.dribbbleclient.di.Injectable
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class OAuthFragment : Fragment() {
+class OAuthFragment : Fragment(), Injectable {
     private lateinit var webview: WebView
-    private lateinit var preferencesUtils: PreferencesUtils
-    private lateinit var serviceGenerator: ServiceGenerator
+    @Inject
+    lateinit var preferencesUtils: PreferencesUtils
+    @Inject
+    lateinit var oAuthService: OAuthService
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,16 +48,13 @@ class OAuthFragment : Fragment() {
 
 
         }
-        preferencesUtils = PreferencesUtils(activity?.application!!) // TODO: Ugly
-        serviceGenerator = ServiceGenerator(preferencesUtils)
         return binding.root
     }
 
     private fun getToken(code: String) {
         LogUtils.i("getToken with code: $code")
-        serviceGenerator.changeBaseUrl(ServiceGenerator.OAUTH_BASE_URL) // TODO: lame, refactor with dagger
-        val oauthService: OAuthService = serviceGenerator.createService(OAuthService::class.java)
-        oauthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET, code, BuildConfig.DRIBBBLE_CALLBACK_URL)
+        oAuthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET,
+                code, BuildConfig.DRIBBBLE_CALLBACK_URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ token ->
@@ -64,8 +64,6 @@ class OAuthFragment : Fragment() {
                     LogUtils.e("error in getToken", it)
                     exit()
                 })
-
-
     }
 
     private fun saveToken(oauthToken: OAuthToken) {

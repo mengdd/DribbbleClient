@@ -1,14 +1,17 @@
 package com.ddmeng.dribbbleclient.utils
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PreferencesUtils constructor(appContext: Context) {
+@Singleton
+class PreferencesUtils @Inject constructor(appContext: Application) {
     companion object {
         private const val SHARED_PREFERENCE_NAME = "dribbble_client_shared_preferences"
         private const val USER_LOGGED_IN = "user_logged_in"
         private const val USER_TOKEN = "user_token"
-
     }
 
     private val sharedPreferences: SharedPreferences
