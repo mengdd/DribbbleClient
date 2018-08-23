@@ -1,10 +1,9 @@
 package com.ddmeng.dribbbleclient.utils
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
-class PreferencesUtils constructor(app: Application) {
+class PreferencesUtils constructor(appContext: Context) {
     companion object {
         private const val SHARED_PREFERENCE_NAME = "dribbble_client_shared_preferences"
         private const val USER_LOGGED_IN = "user_logged_in"
@@ -15,7 +14,7 @@ class PreferencesUtils constructor(app: Application) {
     private val sharedPreferences: SharedPreferences
 
     init {
-        sharedPreferences = app.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = appContext.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
     val isUserLoggedIn
@@ -24,18 +23,21 @@ class PreferencesUtils constructor(app: Application) {
         get() = sharedPreferences.getString(USER_TOKEN, "")
 
     fun saveUserLoggedIn(isLoggedIn: Boolean) {
+        LogUtils.d("save user logged in : $isLoggedIn")
         sharedPreferences.put {
             putBoolean(USER_LOGGED_IN, isLoggedIn)
         }
     }
 
     infix fun saveUserToken(token: String?) {
+        LogUtils.d("save user token : $token")
         sharedPreferences.put {
             putString(USER_TOKEN, token)
         }
     }
 
     fun deleteToken() {
+        LogUtils.d("delete user token")
         sharedPreferences.put {
             putString(USER_TOKEN, "")
         }

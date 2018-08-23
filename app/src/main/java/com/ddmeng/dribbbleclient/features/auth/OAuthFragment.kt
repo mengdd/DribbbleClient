@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,17 +17,15 @@ import com.ddmeng.dribbbleclient.data.remote.ApiConstants
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
 import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
+import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class OAuthFragment : Fragment() {
-    companion object { //TODO is this the right way to declare static final String?
-        const val TAG: String = "OAuthFragment"
-    }
-
     private lateinit var webview: WebView
     private lateinit var preferencesUtils: PreferencesUtils
+    private lateinit var serviceGenerator: ServiceGenerator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,7 +36,7 @@ class OAuthFragment : Fragment() {
         webview.webViewClient = object : WebViewClient() {
 
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                Log.i(TAG, "url $url")
+                LogUtils.i("url $url")
                 val uri = Uri.parse(url)
                 val code = uri.getQueryParameter("code")
                 code?.let { getToken(code) }
@@ -49,12 +46,14 @@ class OAuthFragment : Fragment() {
 
         }
         preferencesUtils = PreferencesUtils(activity?.application!!) // TODO: Ugly
+        serviceGenerator = ServiceGenerator(preferencesUtils)
         return binding.root
     }
 
     private fun getToken(code: String) {
-        Log.i(TAG, "getToken with code: $code")
-        val oauthService: OAuthService = ServiceGenerator.createService(OAuthService::class.java)
+        LogUtils.i("getToken with code: $code")
+        serviceGenerator.changeBaseUrl(ServiceGenerator.OAUTH_BASE_URL) // TODO: lame, refactor with dagger
+        val oauthService: OAuthService = serviceGenerator.createService(OAuthService::class.java)
         oauthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET, code, BuildConfig.DRIBBBLE_CALLBACK_URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,7 +61,7 @@ class OAuthFragment : Fragment() {
                     saveToken(token)
                     exit()
                 }, {
-                    Log.e(TAG, "error in getToken", it)
+                    LogUtils.e("error in getToken", it)
                     exit()
                 })
 
@@ -70,7 +69,7 @@ class OAuthFragment : Fragment() {
     }
 
     private fun saveToken(oauthToken: OAuthToken) {
-        Log.i(TAG, "save Token: " + oauthToken.accessToken)
+        preferencesUtils.saveUserLoggedIn(true)
         preferencesUtils.saveUserToken(oauthToken.accessToken)
     }
 
