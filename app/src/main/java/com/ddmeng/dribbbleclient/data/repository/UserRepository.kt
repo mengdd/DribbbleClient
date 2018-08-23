@@ -6,6 +6,7 @@ import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
+import com.ddmeng.dribbbleclient.utils.LogUtils
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 
@@ -24,13 +25,13 @@ class UserRepository private constructor(
                 }
     }
 
-    fun getUser(): LiveData<Resource<User>> {
+    fun getUser(forceRefresh: Boolean): LiveData<Resource<User>> {
         return object : NetworkBoundResource<User, User>(appExecutors) {
             override fun saveCallResult(item: User) {
                 userDao.insert(item)
             }
 
-            override fun shouldFetch(data: User?) = data == null
+            override fun shouldFetch(data: User?) = (forceRefresh || data == null)
 
             override fun loadFromDb() = userDao.query()
 
@@ -39,8 +40,9 @@ class UserRepository private constructor(
     }
 
     fun deleteUser(user: User) {
-        Completable.fromAction { userDao.delete(user) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        Completable.fromAction {
+            LogUtils.d("delete user: " + user.name)
+            userDao.delete(user)
+        }.subscribeOn(Schedulers.io()).subscribe()
     }
 }

@@ -70,14 +70,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             drawerLayout.closeDrawer(Gravity.START)
-            true // TODO why can't I use "return true" here?
+            true
         }
 
-        userViewModel.getUserInfo().observe(this, Observer { userResource ->
-            LogUtils.i("getUserInfo Observer onChanged: $userResource")
-            drawerHeaderBinding.user = userResource?.data
-            drawerHeaderBinding.userResource = userResource
-        })
+        userViewModel.getUserInfo(false)
+                .observe(this, Observer { userResource ->
+                    LogUtils.i("getUserInfo Observer onChanged: $userResource")
+                    drawerHeaderBinding.user = userResource?.data
+                    drawerHeaderBinding.userResource = userResource
+                })
 
         showHomeFragment()
     }
@@ -88,11 +89,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateLoginStatus() {
-        LogUtils.i("is User logged in ${preferencesUtils.isUserLoggedIn}")
-        if (!preferencesUtils.isUserLoggedIn) {
-            loginButton.visibility = View.VISIBLE
-        } else {
+        LogUtils.i("is User logged in: ${preferencesUtils.isUserLoggedIn}")
+        if (preferencesUtils.isUserLoggedIn) {
             loginButton.visibility = View.GONE
+            userViewModel.getUserInfo(true) // TODO why this not work?
+        } else {
+            loginButton.visibility = View.VISIBLE
         }
     }
 

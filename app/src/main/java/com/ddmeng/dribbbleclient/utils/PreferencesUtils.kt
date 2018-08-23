@@ -23,18 +23,21 @@ class PreferencesUtils constructor(appContext: Context) {
         get() = sharedPreferences.getString(USER_TOKEN, "")
 
     fun saveUserLoggedIn(isLoggedIn: Boolean) {
+        LogUtils.d("save user logged in : $isLoggedIn")
         sharedPreferences.put {
             putBoolean(USER_LOGGED_IN, isLoggedIn)
         }
     }
 
     infix fun saveUserToken(token: String?) {
+        LogUtils.d("save user token : $token")
         sharedPreferences.put {
             putString(USER_TOKEN, token)
         }
     }
 
     fun deleteToken() {
+        LogUtils.d("delete user token")
         sharedPreferences.put {
             putString(USER_TOKEN, "")
         }
