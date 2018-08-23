@@ -2,6 +2,7 @@ package com.ddmeng.dribbbleclient.di.component
 
 import android.app.Application
 import com.ddmeng.dribbbleclient.DribbbleApplication
+import com.ddmeng.dribbbleclient.di.module.ApiModule
 import com.ddmeng.dribbbleclient.di.module.AppModule
 import com.ddmeng.dribbbleclient.di.module.MainActivityModule
 import dagger.BindsInstance
@@ -16,7 +17,8 @@ import javax.inject.Singleton
             AndroidInjectionModule::class,
             AndroidSupportInjectionModule::class,
             AppModule::class,
-            MainActivityModule::class
+            MainActivityModule::class,
+            ApiModule::class
         ]
 )
 interface AppComponent {

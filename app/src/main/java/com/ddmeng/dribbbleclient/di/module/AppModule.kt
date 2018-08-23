@@ -3,8 +3,6 @@ package com.ddmeng.dribbbleclient.di.module
 import android.app.Application
 import com.ddmeng.dribbbleclient.data.local.DribbbleClientDatabase
 import com.ddmeng.dribbbleclient.data.local.UserDao
-import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
-import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.repository.UserRepository
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.viewmodel.UserViewModelFactory
@@ -25,13 +23,6 @@ class AppModule {
     @Provides
     fun provideUserDao(dribbbleClientDatabase: DribbbleClientDatabase): UserDao {
         return dribbbleClientDatabase.userDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserService(serviceGenerator: ServiceGenerator): UserService {
-        serviceGenerator.changeBaseUrl(ServiceGenerator.API_BASE_URL)
-        return serviceGenerator.createService(UserService::class.java)
     }
 
     @Singleton
