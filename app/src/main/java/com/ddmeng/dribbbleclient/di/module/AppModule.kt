@@ -1,7 +1,6 @@
 package com.ddmeng.dribbbleclient.di.module
 
 import android.app.Application
-import com.ddmeng.dribbbleclient.AppExecutors
 import com.ddmeng.dribbbleclient.data.local.DribbbleClientDatabase
 import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.remote.ServiceGenerator
@@ -30,26 +29,9 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideUserService(preferencesUtils: PreferencesUtils): UserService {
-        return provideServiceGenerator(preferencesUtils).createService(UserService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideServiceGenerator(preferencesUtils: PreferencesUtils): ServiceGenerator {
-        return ServiceGenerator(preferencesUtils)
-    }
-
-    @Singleton
-    @Provides
-    fun providePreferencesUtils(app: Application): PreferencesUtils {
-        return PreferencesUtils(app)
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserRepository(appExecutors: AppExecutors, userDao: UserDao, userService: UserService): UserRepository {
-        return UserRepository.getInstance(appExecutors, userDao, userService)
+    fun provideUserService(serviceGenerator: ServiceGenerator): UserService {
+        serviceGenerator.changeBaseUrl(ServiceGenerator.API_BASE_URL)
+        return serviceGenerator.createService(UserService::class.java)
     }
 
     @Singleton

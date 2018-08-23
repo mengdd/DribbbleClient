@@ -9,21 +9,14 @@ import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserRepository private constructor(
+@Singleton
+class UserRepository @Inject constructor(
         private val appExecutors: AppExecutors,
         private val userDao: UserDao,
         private val userService: UserService) {
-    companion object {
-        @Volatile
-        private var instance: UserRepository? = null
-
-        fun getInstance(appExecutors: AppExecutors, userDao: UserDao, userService: UserService) =
-                instance ?: synchronized(this) {
-                    instance
-                            ?: UserRepository(appExecutors, userDao, userService).also { instance = it }
-                }
-    }
 
     fun getUser(forceRefresh: Boolean): LiveData<Resource<User>> {
         return object : NetworkBoundResource<User, User>(appExecutors) {

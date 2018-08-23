@@ -6,9 +6,11 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class ServiceGenerator constructor(preferencesUtils: PreferencesUtils) {
+@Singleton
+class ServiceGenerator @Inject constructor(preferencesUtils: PreferencesUtils) {
 
     companion object {
         const val OAUTH_BASE_URL = "https://dribbble.com/oauth/"
