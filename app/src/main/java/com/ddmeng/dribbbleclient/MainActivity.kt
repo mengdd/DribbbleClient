@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         userViewModel = ViewModelProviders.of(this, userViewModelFactory)
                 .get(UserViewModel::class.java)
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding = DataBindingUtil.setContentView(this, R.layout.activity_main) as ActivityMainBinding
 
         drawerLayout = binding.drawerLayout
         toolbar = binding.toolbarLayout!!.toolbar
