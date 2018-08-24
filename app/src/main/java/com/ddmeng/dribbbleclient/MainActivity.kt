@@ -13,6 +13,8 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import com.ddmeng.dribbbleclient.data.model.User
+import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.databinding.ActivityMainBinding
 import com.ddmeng.dribbbleclient.databinding.DrawerHeaderBinding
 import com.ddmeng.dribbbleclient.features.auth.OAuthFragment
@@ -80,12 +82,13 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
             true
         }
 
-        userViewModel.getUserInfo(false)
-                .observe(this, Observer { userResource ->
-                    LogUtils.i("getUserInfo Observer onChanged: $userResource")
-                    drawerHeaderBinding.user = userResource?.data
-                    drawerHeaderBinding.userResource = userResource
-                })
+        userViewModel.user.observe(this, Observer { userResource ->
+            LogUtils.i("getUserInfo Observer onChanged: $userResource")
+            drawerHeaderBinding.user = userResource?.data
+            drawerHeaderBinding.userResource = userResource
+        })
+
+        userViewModel.fetch(false)
 
         showHomeFragment()
     }
@@ -101,7 +104,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         LogUtils.i("is User logged in: ${preferencesUtils.isUserLoggedIn}")
         if (preferencesUtils.isUserLoggedIn) {
             loginButton.visibility = View.GONE
-            userViewModel.getUserInfo(true) // TODO why this not work?
+            userViewModel.fetch(true)
         } else {
             loginButton.visibility = View.VISIBLE
         }
