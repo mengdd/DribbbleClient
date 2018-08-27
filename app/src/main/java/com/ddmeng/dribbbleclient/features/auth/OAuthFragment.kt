@@ -1,5 +1,6 @@
 package com.ddmeng.dribbbleclient.features.auth
 
+import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
@@ -19,8 +20,7 @@ import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
 import com.ddmeng.dribbbleclient.di.Injectable
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.ddmeng.dribbbleclient.utils.singleIoToUi
 import javax.inject.Inject
 
 class OAuthFragment : Fragment(), Injectable {
@@ -42,7 +42,7 @@ class OAuthFragment : Fragment(), Injectable {
                 LogUtils.i("url $url")
                 val uri = Uri.parse(url)
                 val code = uri.getQueryParameter("code")
-                code?.let { getToken(code) }
+                code.takeUnless { it.isNullOrEmpty() }?.let { getToken(it) }
                 return false
             }
 
@@ -51,12 +51,12 @@ class OAuthFragment : Fragment(), Injectable {
         return binding.root
     }
 
+    @SuppressLint("CheckResult")
     private fun getToken(code: String) {
         LogUtils.i("getToken with code: $code")
         oAuthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET,
                 code, BuildConfig.DRIBBBLE_CALLBACK_URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(singleIoToUi())
                 .subscribe({ token ->
                     saveToken(token)
                     exit()
