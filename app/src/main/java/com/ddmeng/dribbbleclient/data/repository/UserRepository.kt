@@ -1,6 +1,7 @@
 package com.ddmeng.dribbbleclient.data.repository
 
 import android.arch.lifecycle.LiveData
+import android.webkit.CookieManager
 import com.ddmeng.dribbbleclient.AppExecutors
 import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.model.User
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
         private val appExecutors: AppExecutors,
         private val userDao: UserDao,
-        private val userService: UserService) {
+        private val userService: UserService,
+        private val cookieManager: CookieManager) {
 
     fun getUser(forceRefresh: Boolean): LiveData<Resource<User>> {
         return object : NetworkBoundResource<User, User>(appExecutors) {
@@ -36,6 +38,11 @@ class UserRepository @Inject constructor(
         Completable.fromAction {
             LogUtils.d("delete user: " + user.name)
             userDao.delete(user)
+            clearCookies()
         }.subscribeOn(Schedulers.io()).subscribe()
+    }
+
+    private fun clearCookies() {
+        cookieManager.removeAllCookie()
     }
 }

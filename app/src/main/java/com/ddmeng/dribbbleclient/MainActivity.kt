@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
@@ -14,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import com.ddmeng.dribbbleclient.data.model.User
-import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.databinding.ActivityMainBinding
 import com.ddmeng.dribbbleclient.databinding.DrawerHeaderBinding
 import com.ddmeng.dribbbleclient.features.auth.OAuthFragment
@@ -57,13 +57,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         navigationView = binding.navigationView
         headerView = navigationView.getHeaderView(0)
         drawerHeaderBinding = DrawerHeaderBinding.bind(headerView)
-        drawerHeaderBinding.userViewModel = userViewModel
+        drawerHeaderBinding.callback = this@MainActivity
 
         loginButton = headerView.login_button
-        loginButton.setOnClickListener {
-            startLogin()
-            drawerLayout.closeDrawer(Gravity.START)
-        }
 
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp)
@@ -95,6 +91,26 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 
+    fun onLogInClick() {
+        val oAuthFragment = OAuthFragment()
+        showFragment(oAuthFragment)
+        drawerLayout.closeDrawer(Gravity.START)
+    }
+
+    fun onLogOutClick(user: User) {
+        AlertDialog.Builder(this@MainActivity)
+                .setTitle(getString(R.string.log_out_dialog_title))
+                .setMessage(getString(R.string.log_out_dialog_content))
+                .setCancelable(false)
+                .setPositiveButton(getString(android.R.string.ok)) { _, _ ->
+                    userViewModel.deleteUser(user)
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+
+                }
+                .show()
+    }
+
     fun showHomeFragment() {
         updateLoginStatus()
         showFragment(HomeFragment())
@@ -109,13 +125,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
             loginButton.visibility = View.VISIBLE
         }
     }
-
-
-    private fun startLogin() {
-        val oAuthFragment = OAuthFragment()
-        showFragment(oAuthFragment)
-    }
-
 
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager

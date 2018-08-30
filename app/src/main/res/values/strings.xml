@@ -3,4 +3,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="home">Home</string>
+    <string name="log_out_dialog_title">Log Out?</string>
+    <string name="log_out_dialog_content">Your account will be removed.</string>
+    <string name="cancel">Cancel</string>
 </resources>

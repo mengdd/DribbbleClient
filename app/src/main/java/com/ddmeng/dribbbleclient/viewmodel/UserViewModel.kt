@@ -12,7 +12,7 @@ import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 class UserViewModel constructor(private val repository: UserRepository,
                                 private val preferencesUtils: PreferencesUtils) : ViewModel() {
     private val forceFetch = MutableLiveData<Boolean>()
-    val user : LiveData<Resource<User>> = Transformations.switchMap(forceFetch) {
+    val user: LiveData<Resource<User>> = Transformations.switchMap(forceFetch) {
         repository.getUser(it)
     }
 
