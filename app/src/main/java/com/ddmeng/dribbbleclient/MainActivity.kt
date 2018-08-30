@@ -105,6 +105,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 .setPositiveButton(getString(android.R.string.ok)) { _, _ ->
                     userViewModel.deleteUser(user)
                 }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+
+                }
                 .show()
     }
 
