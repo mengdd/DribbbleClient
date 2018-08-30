@@ -13,8 +13,8 @@
             type="com.ddmeng.dribbbleclient.data.valueobject.Resource" />
 
         <variable
-            name="userViewModel"
-            type="com.ddmeng.dribbbleclient.viewmodel.UserViewModel" />
+            name="callback"
+            type="com.ddmeng.dribbbleclient.MainActivity" />
 
     </data>
 
@@ -45,6 +45,7 @@
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> callback.onLogInClick()}"
             android:text="@string/login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/account_icon"
@@ -54,7 +55,7 @@
             android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{(view) -> userViewModel.deleteUser(user)}"
+            android:onClick="@{() -> callback.onLogOutClick(user)}"
             android:text="@string/logout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_button"
