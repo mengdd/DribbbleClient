@@ -8,9 +8,8 @@ import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.testing.OpenForTesting
-import com.ddmeng.dribbbleclient.utils.LogUtils
 import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,10 +37,9 @@ class UserRepository @Inject constructor(
 
     fun deleteUser(user: User) {
         Completable.fromAction {
-            LogUtils.d("delete user: " + user.name)
             userDao.delete(user)
             clearCookies()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        }.subscribeOn(io()).subscribe()
     }
 
     private fun clearCookies() {

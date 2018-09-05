@@ -3,7 +3,6 @@ package com.ddmeng.dribbbleclient.data.repository
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.util.Log
 import android.webkit.CookieManager
 import com.ddmeng.dribbbleclient.AppExecutors
 import com.ddmeng.dribbbleclient.data.local.UserDao
@@ -12,22 +11,18 @@ import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.utils.ApiUtil
 import com.ddmeng.dribbbleclient.utils.InstantAppExecutors
+import com.ddmeng.dribbbleclient.utils.RxImmediateSchedulerRule
 import com.ddmeng.dribbbleclient.utils.TestUtil
 import com.ddmeng.dribbbleclient.utils.mock
 import org.junit.Before
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(Log::class)
 class UserRepositoryTest {
 
     private lateinit var appExecutors: AppExecutors
@@ -40,10 +35,15 @@ class UserRepositoryTest {
 
     private lateinit var userRepository: UserRepository
 
+    companion object {
+        @ClassRule
+        @JvmField
+        val schedulers = RxImmediateSchedulerRule()
+    }
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        PowerMockito.mockStatic(Log::class.java)
 
         appExecutors = InstantAppExecutors()
 
