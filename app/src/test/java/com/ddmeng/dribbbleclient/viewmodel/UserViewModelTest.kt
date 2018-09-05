@@ -1,19 +1,20 @@
 package com.ddmeng.dribbbleclient.viewmodel
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.repository.UserRepository
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
+import com.ddmeng.dribbbleclient.utils.ImmediateSchedulerRule
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.utils.TestUtil
 import com.ddmeng.dribbbleclient.utils.mock
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
-import org.junit.Rule
+import org.junit.ClassRule
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -25,6 +26,8 @@ class UserViewModelTest {
     private lateinit var userRepository: UserRepository
     private lateinit var userViewModel: UserViewModel
 
+
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -32,9 +35,11 @@ class UserViewModelTest {
         userViewModel = UserViewModel(userRepository, preferencesUtils)
     }
 
-    @Rule
-    @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
+    companion object {
+        @ClassRule
+        @JvmField
+        val schedulers = ImmediateSchedulerRule()
+    }
 
     @Test
     fun testNull() {
@@ -54,7 +59,7 @@ class UserViewModelTest {
     @Test
     fun sendResultToUI() {
         val foo = MutableLiveData<Resource<User>>()
-        Mockito.`when`(userRepository.getUser(false)).thenReturn(foo)
+        Mockito.`when`(userRepository.getUser(anyBoolean())).thenReturn(foo)
         val observer = mock<Observer<Resource<User>>>()
         userViewModel.user.observeForever(observer)
 
@@ -80,8 +85,6 @@ class UserViewModelTest {
         Mockito.verify(userRepository).deleteUser(user)
         Mockito.verify(preferencesUtils).saveUserLoggedIn(false)
         Mockito.verify(preferencesUtils).deleteToken()
-
-        Mockito.verify(observer).onChanged(null)
     }
 
 }

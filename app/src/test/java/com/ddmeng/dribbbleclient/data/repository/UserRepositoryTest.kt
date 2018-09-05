@@ -11,7 +11,7 @@ import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.utils.ApiUtil
 import com.ddmeng.dribbbleclient.utils.InstantAppExecutors
-import com.ddmeng.dribbbleclient.utils.RxImmediateSchedulerRule
+import com.ddmeng.dribbbleclient.utils.ImmediateSchedulerRule
 import com.ddmeng.dribbbleclient.utils.TestUtil
 import com.ddmeng.dribbbleclient.utils.mock
 import org.junit.Before
@@ -38,7 +38,7 @@ class UserRepositoryTest {
     companion object {
         @ClassRule
         @JvmField
-        val schedulers = RxImmediateSchedulerRule()
+        val schedulers = ImmediateSchedulerRule()
     }
 
     @Before
