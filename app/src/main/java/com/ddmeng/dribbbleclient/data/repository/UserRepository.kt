@@ -7,12 +7,14 @@ import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@OpenForTesting
 @Singleton
 class UserRepository @Inject constructor(
         private val appExecutors: AppExecutors,
