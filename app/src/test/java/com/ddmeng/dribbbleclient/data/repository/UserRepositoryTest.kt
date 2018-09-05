@@ -69,7 +69,7 @@ class UserRepositoryTest {
         Mockito.`when`(userService.getUser()).thenReturn(call)
         val observer = mock<Observer<Resource<User>>>()
 
-        userRepository.getUser(true).observeForever(observer)
+        userRepository.getUser(false).observeForever(observer)
 
         verify(userService, Mockito.never()).getUser()
         val updatedDbData = MutableLiveData<User>()
@@ -97,6 +97,8 @@ class UserRepositoryTest {
         val user = TestUtil.createUser("foo")
         dbData.value = user
         Mockito.`when`(userDao.query()).thenReturn(dbData)
+        val call = ApiUtil.successCall(user)
+        Mockito.`when`(userService.getUser()).thenReturn(call)
         val observer = mock<Observer<Resource<User>>>()
 
         userRepository.getUser(true).observeForever(observer)
