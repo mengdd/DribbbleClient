@@ -3,6 +3,7 @@ package com.ddmeng.dribbbleclient.data.repository
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.util.Log
 import android.webkit.CookieManager
 import com.ddmeng.dribbbleclient.AppExecutors
 import com.ddmeng.dribbbleclient.data.local.UserDao
@@ -16,11 +17,17 @@ import com.ddmeng.dribbbleclient.utils.mock
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import org.powermock.api.mockito.PowerMockito
+import org.powermock.core.classloader.annotations.PrepareForTest
+import org.powermock.modules.junit4.PowerMockRunner
 
+@RunWith(PowerMockRunner::class)
+@PrepareForTest(Log::class)
 class UserRepositoryTest {
 
     private lateinit var appExecutors: AppExecutors
@@ -36,6 +43,8 @@ class UserRepositoryTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        PowerMockito.mockStatic(Log::class.java)
+
         appExecutors = InstantAppExecutors()
 
         userRepository = UserRepository(appExecutors, userDao, userService, cookieManager)
@@ -93,5 +102,15 @@ class UserRepositoryTest {
         userRepository.getUser(true).observeForever(observer)
         verify(userService).getUser()
         verify(observer).onChanged(Resource.success(user))
+    }
+
+    @Test
+    fun deleteAccount() {
+        val user = TestUtil.createUser("foo")
+
+        userRepository.deleteUser(user)
+
+        verify(userDao).delete(user)
+        verify(cookieManager).removeAllCookie()
     }
 }
