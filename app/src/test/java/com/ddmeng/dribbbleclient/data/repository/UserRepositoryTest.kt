@@ -81,4 +81,17 @@ class UserRepositoryTest {
         verify(userService, Mockito.never()).getUser()
         verify(observer).onChanged(Resource.success(user))
     }
+
+    @Test
+    fun shouldGoToNetworkWhenForce() {
+        val dbData = MutableLiveData<User>()
+        val user = TestUtil.createUser("foo")
+        dbData.value = user
+        Mockito.`when`(userDao.query()).thenReturn(dbData)
+        val observer = mock<Observer<Resource<User>>>()
+
+        userRepository.getUser(true).observeForever(observer)
+        verify(userService).getUser()
+        verify(observer).onChanged(Resource.success(user))
+    }
 }
