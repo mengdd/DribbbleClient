@@ -47,11 +47,12 @@ jobs:
     - stage: Static Analysis
       name: ktlin
       script: ./gradlew ktlint
+    - script: ./gradlew lint
       name: lint
-      script: ./gradlew lint
     - stage: Tests
       name: Unit Tests
       script: ./gradlew test
+    - script: ./gradlew connectedAndroidTest
       name: Instrumentation Tests
     # Emulator Management: Create, Start and Wait
       before_script:
@@ -59,4 +60,3 @@ jobs:
       - emulator -avd test -no-window &
       - android-wait-for-emulator
       - adb shell input keyevent 82 &
-      script: ./gradlew connectedAndroidTest
