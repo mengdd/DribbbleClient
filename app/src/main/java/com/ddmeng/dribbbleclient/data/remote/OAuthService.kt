@@ -7,8 +7,10 @@ import retrofit2.http.Query
 
 interface OAuthService {
     @POST("token")
-    fun getToken(@Query("client_id") clientId: String,
+    fun getToken(
+        @Query("client_id") clientId: String,
         @Query("client_secret") clientSecret: String,
         @Query("code") code: String,
-        @Query("redirect_url") redirectUrl: String): Single<OAuthToken>
+        @Query("redirect_url") redirectUrl: String
+    ): Single<OAuthToken>
 }

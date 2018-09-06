@@ -11,8 +11,11 @@ import com.ddmeng.dribbbleclient.databinding.FragmentHomeBinding
 import com.ddmeng.dribbbleclient.di.Injectable
 
 class HomeFragment : Fragment(), Injectable {
-    override fun onCreateView(inflater: LayoutInflater,
-        container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: FragmentHomeBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_home, container, false)
         return binding.root

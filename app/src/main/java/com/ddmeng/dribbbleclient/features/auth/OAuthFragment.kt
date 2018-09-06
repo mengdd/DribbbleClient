@@ -30,8 +30,11 @@ class OAuthFragment : Fragment(), Injectable {
     @Inject
     lateinit var oAuthService: OAuthService
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: FragmentAuthBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_auth,
                 container, false)
         webview = binding.webview
