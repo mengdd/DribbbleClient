@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient
 
-
 import android.os.Handler
 import android.os.Looper
 import java.util.concurrent.Executor
@@ -16,9 +15,9 @@ import javax.inject.Singleton
  */
 @Singleton
 open class AppExecutors(
-        private val diskIO: Executor,
-        private val networkIO: Executor,
-        private val mainThread: Executor
+    private val diskIO: Executor,
+    private val networkIO: Executor,
+    private val mainThread: Executor
 ) {
 
     @Inject

@@ -26,8 +26,6 @@ class UserViewModelTest {
     private lateinit var userRepository: UserRepository
     private lateinit var userViewModel: UserViewModel
 
-
-
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -73,7 +71,6 @@ class UserViewModelTest {
         Mockito.verify(observer).onChanged(fooValue)
     }
 
-
     @Test
     fun testDeleteUser() {
         val observer = mock<Observer<Resource<User>>>()
@@ -86,5 +83,4 @@ class UserViewModelTest {
         Mockito.verify(preferencesUtils).saveUserLoggedIn(false)
         Mockito.verify(preferencesUtils).deleteToken()
     }
-
 }

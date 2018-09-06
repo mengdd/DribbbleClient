@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.data.repository
 
-
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -88,7 +87,6 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
         } catch (t: Throwable) {
             throw AssertionError(t)
         }
-
     }
 
     @Test

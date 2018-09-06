@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.data.valueobject
 
-
 /**
  * A generic class that holds a value with its loading status.
  * @param <T>

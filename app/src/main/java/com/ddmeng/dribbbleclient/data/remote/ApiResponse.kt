@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.data.remote
 
-
 import retrofit2.Response
 import java.util.regex.Pattern
 
@@ -45,8 +44,8 @@ sealed class ApiResponse<T> {
 class ApiEmptyResponse<T> : ApiResponse<T>()
 
 data class ApiSuccessResponse<T>(
-        val body: T,
-        val links: Map<String, String>
+    val body: T,
+    val links: Map<String, String>
 ) : ApiResponse<T>() {
     constructor(body: T, linkHeader: String?) : this(
             body = body,
@@ -86,7 +85,6 @@ data class ApiSuccessResponse<T>(
             }
             return links
         }
-
     }
 }
 

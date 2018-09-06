@@ -49,10 +49,12 @@ class ApiModule {
     @Singleton
     @Provides
     @Named("shotRetrofit")
-    fun provideShotRetrofit(retrofitBuilder: Retrofit.Builder,
-                            okHttpClientBuilder: OkHttpClient.Builder,
-                            interceptor: AuthInterceptor,
-                            @Named("shotEndpoint") baseUrl: String): Retrofit {
+    fun provideShotRetrofit(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClientBuilder: OkHttpClient.Builder,
+        interceptor: AuthInterceptor,
+        @Named("shotEndpoint") baseUrl: String
+    ): Retrofit {
         val client = okHttpClientBuilder.addInterceptor(interceptor).build()
         return retrofitBuilder
                 .client(client)
@@ -60,13 +62,14 @@ class ApiModule {
                 .build()
     }
 
-
     @Singleton
     @Provides
     @Named("authRetrofit")
-    fun provideUserRetrofit(retrofitBuilder: Retrofit.Builder,
-                            okHttpClientBuilder: OkHttpClient.Builder,
-                            @Named("authEndpoint") baseUrl: String): Retrofit {
+    fun provideUserRetrofit(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClientBuilder: OkHttpClient.Builder,
+        @Named("authEndpoint") baseUrl: String
+    ): Retrofit {
         return retrofitBuilder
                 .client(okHttpClientBuilder.build())
                 .baseUrl(baseUrl)

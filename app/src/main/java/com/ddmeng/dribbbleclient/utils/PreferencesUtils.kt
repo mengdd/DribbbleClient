@@ -45,7 +45,6 @@ class PreferencesUtils @Inject constructor(appContext: Application) {
             putString(USER_TOKEN, "")
         }
     }
-
 }
 
 private inline fun SharedPreferences.put(body: SharedPreferences.Editor.() -> Unit) {
