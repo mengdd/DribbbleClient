@@ -14,10 +14,10 @@ import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
-        private val appExecutors: AppExecutors,
-        private val userDao: UserDao,
-        private val userService: UserService,
-        private val cookieManager: CookieManager) {
+    private val appExecutors: AppExecutors,
+    private val userDao: UserDao,
+    private val userService: UserService,
+    private val cookieManager: CookieManager) {
 
     fun getUser(forceRefresh: Boolean): LiveData<Resource<User>> {
         return object : NetworkBoundResource<User, User>(appExecutors) {
