@@ -60,7 +60,6 @@ class ApiModule {
                 .build()
     }
 
-
     @Singleton
     @Provides
     @Named("authRetrofit")

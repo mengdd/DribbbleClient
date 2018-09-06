@@ -45,8 +45,6 @@ class OAuthFragment : Fragment(), Injectable {
                 code.takeUnless { it.isNullOrEmpty() }?.let { getToken(it) }
                 return false
             }
-
-
         }
         return binding.root
     }

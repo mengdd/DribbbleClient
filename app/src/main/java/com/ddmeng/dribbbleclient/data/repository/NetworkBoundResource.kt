@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.data.repository
 
-
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.support.annotation.MainThread
@@ -11,7 +10,6 @@ import com.ddmeng.dribbbleclient.data.remote.ApiErrorResponse
 import com.ddmeng.dribbbleclient.data.remote.ApiResponse
 import com.ddmeng.dribbbleclient.data.remote.ApiSuccessResponse
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
-
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.

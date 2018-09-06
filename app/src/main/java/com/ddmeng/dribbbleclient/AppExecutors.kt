@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient
 
-
 import android.os.Handler
 import android.os.Looper
 import java.util.concurrent.Executor

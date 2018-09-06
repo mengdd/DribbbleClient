@@ -14,5 +14,4 @@ class OAuthToken {
     @SerializedName("scope")
     @Expose
     var scope: String? = null
-
 }

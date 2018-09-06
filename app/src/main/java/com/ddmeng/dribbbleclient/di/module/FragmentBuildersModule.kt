@@ -5,7 +5,6 @@ import com.ddmeng.dribbbleclient.features.home.HomeFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-
 @Suppress("unused")
 @Module
 abstract class FragmentBuildersModule {

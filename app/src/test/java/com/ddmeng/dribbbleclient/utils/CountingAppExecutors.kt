@@ -63,8 +63,8 @@ class CountingAppExecutors(idleCallback: (() -> Unit)? = null) {
     }
 
     private class CountingExecutor(
-            private val increment: () -> Unit,
-            private val decrement: () -> Unit
+        private val increment: () -> Unit,
+        private val decrement: () -> Unit
     ) : Executor {
 
         private val delegate = Executors.newSingleThreadExecutor()

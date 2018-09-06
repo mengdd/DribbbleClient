@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.data.remote
 
-
 import retrofit2.Response
 import java.util.regex.Pattern
 
@@ -86,7 +85,6 @@ data class ApiSuccessResponse<T>(
             }
             return links
         }
-
     }
 }
 

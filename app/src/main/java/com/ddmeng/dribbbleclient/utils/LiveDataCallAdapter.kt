@@ -1,6 +1,5 @@
 package com.ddmeng.dribbbleclient.utils
 
-
 import android.arch.lifecycle.LiveData
 import com.ddmeng.dribbbleclient.data.remote.ApiResponse
 import retrofit2.Call
