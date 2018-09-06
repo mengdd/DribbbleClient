@@ -38,6 +38,10 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
+notifications:
+  email:
+    - ddmeng@thoughtworks.com
+
 jobs:
   include:
     - stage: Static Analysis
