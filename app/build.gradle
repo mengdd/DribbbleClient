@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 27
@@ -18,6 +19,9 @@ android {
         buildConfigField "String", "DRIBBBLE_CALLBACK_URL", "\"${callback_url}\""
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -27,8 +31,15 @@ android {
         enabled = true
     }
 }
+
 configurations {
     ktlint
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled false
 }
 
 task ktlint(type: JavaExec, group: "verification") {
