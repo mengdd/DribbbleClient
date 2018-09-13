@@ -49,6 +49,9 @@ jobs:
       script: ./gradlew ktlint
     - script: ./gradlew lint
       name: lint
+    - name: Unit Test Coverage
+      script: ./gradlew createDebugUnitTestCoverageReport
+      after_success: bash <(curl -s https://codecov.io/bash)
     - stage: Tests
       name: Unit Tests
       script: ./gradlew test
