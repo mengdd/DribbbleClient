@@ -51,7 +51,11 @@ jobs:
       name: lint
     - name: Unit Test Coverage
       script: ./gradlew createDebugUnitTestCoverageReport
-      after_success: bash <(curl -s https://codecov.io/bash)
+      after_success:
+      # Renaming folder and files of reports so codecov.io can find it
+      - mv app/build/reports/jacoco/createDebugUnitTestCoverageReport app/build/reports/jacoco/jacocoTestDebugUnitTestReport
+      - mv app/build/reports/jacoco/jacocoTestDebugUnitTestReport/createDebugUnitTestCoverageReport.xml app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml
+      - bash <(curl -s https://codecov.io/bash)
     - stage: Tests
       name: Unit Tests
       script: ./gradlew test
