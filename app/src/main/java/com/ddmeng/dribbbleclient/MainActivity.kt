@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
@@ -42,6 +43,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     lateinit var preferencesUtils: PreferencesUtils
     @Inject
     lateinit var userViewModelFactory: UserViewModelFactory
+    @Inject
+    @VisibleForTesting
+    lateinit var appExecutors: AppExecutors
     private lateinit var userViewModel: UserViewModel
     private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 

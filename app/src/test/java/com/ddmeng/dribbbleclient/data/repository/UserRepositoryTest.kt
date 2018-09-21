@@ -1,5 +1,6 @@
 package com.ddmeng.dribbbleclient.data.repository
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.webkit.CookieManager
@@ -9,12 +10,11 @@ import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
 import com.ddmeng.dribbbleclient.utils.ApiUtil
-import com.ddmeng.dribbbleclient.utils.ImmediateSchedulerRule
 import com.ddmeng.dribbbleclient.utils.InstantAppExecutors
 import com.ddmeng.dribbbleclient.utils.TestUtil
 import com.ddmeng.dribbbleclient.utils.mock
 import org.junit.Before
-import org.junit.ClassRule
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -33,12 +33,6 @@ class UserRepositoryTest {
 
     private lateinit var userRepository: UserRepository
 
-    companion object {
-        @ClassRule
-        @JvmField
-        val schedulers = ImmediateSchedulerRule()
-    }
-
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -48,9 +42,9 @@ class UserRepositoryTest {
         userRepository = UserRepository(appExecutors, userDao, userService, cookieManager)
     }
 
-//    @Rule
-//    @JvmField
-//    val instantExecutorRule = InstantTaskExecutorRule()
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun loadUser() {
