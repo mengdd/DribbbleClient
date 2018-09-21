@@ -21,6 +21,10 @@ object LogUtils {
         Log.i(tag, msg)
     }
 
+    fun e(msg: String) {
+        Log.e(TAG, msg)
+    }
+
     fun e(msg: String, tr: Throwable) {
         Log.e(TAG, msg, tr)
     }
