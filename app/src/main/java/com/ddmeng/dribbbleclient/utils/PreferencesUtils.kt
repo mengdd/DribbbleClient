@@ -3,9 +3,11 @@ package com.ddmeng.dribbbleclient.utils
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@OpenForTesting
 @Singleton
 class PreferencesUtils @Inject constructor(appContext: Application) {
     companion object {

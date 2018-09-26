@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco-android'
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.ddmeng.dribbbleclient.testing.OpenClass'
+}
 
 android {
     compileSdkVersion 27
@@ -12,7 +18,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.ddmeng.dribbbleclient.DribbbleTestRunner"
 
         buildConfigField "String", "DRIBBBLE_CLIENT_ID", "\"${client_id}\""
         buildConfigField "String", "DRIBBBLE_CLIENT_SECRET", "\"${client_secret}\""
@@ -104,6 +110,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.2'
     androidTestImplementation "android.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation 'org.mockito:mockito-android:2.22.0'
 }
 
 project.afterEvaluate {

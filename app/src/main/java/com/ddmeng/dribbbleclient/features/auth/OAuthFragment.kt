@@ -6,13 +6,14 @@ import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.ddmeng.dribbbleclient.AppExecutors
 import com.ddmeng.dribbbleclient.BuildConfig
 import com.ddmeng.dribbbleclient.MainActivity
 import com.ddmeng.dribbbleclient.R
@@ -24,18 +25,18 @@ import com.ddmeng.dribbbleclient.data.repository.NetworkResource
 import com.ddmeng.dribbbleclient.data.valueobject.Status
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
 import com.ddmeng.dribbbleclient.di.Injectable
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import javax.inject.Inject
 
+@OpenForTesting
 class OAuthFragment : Fragment(), Injectable {
     private lateinit var webview: WebView
     @Inject
     lateinit var preferencesUtils: PreferencesUtils
     @Inject
     lateinit var oAuthService: OAuthService
-    @Inject
-    lateinit var appExecutors: AppExecutors
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -59,8 +60,9 @@ class OAuthFragment : Fragment(), Injectable {
         return binding.root
     }
 
+    @VisibleForTesting
     @SuppressLint("CheckResult")
-    private fun getToken(code: String) {
+    fun getToken(code: String) {
         LogUtils.i("getToken with code: $code")
         object : NetworkResource<OAuthToken>() {
             override fun createCall(): LiveData<ApiResponse<OAuthToken>> {
@@ -84,11 +86,18 @@ class OAuthFragment : Fragment(), Injectable {
     }
 
     private fun saveToken(oauthToken: OAuthToken?) {
+        LogUtils.i("save token ${oauthToken?.accessToken}")
         preferencesUtils.saveUserLoggedIn(true)
         preferencesUtils.saveUserToken(oauthToken?.accessToken)
     }
 
-    private fun exit() {
+    @VisibleForTesting
+    fun exit() {
         (activity as MainActivity).showHomeFragment()
+    }
+
+    @VisibleForTesting
+    fun cleanCookies() {
+        CookieManager.getInstance().removeAllCookie()
     }
 }

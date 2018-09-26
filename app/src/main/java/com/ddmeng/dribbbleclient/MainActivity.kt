@@ -26,7 +26,7 @@ import com.ddmeng.dribbbleclient.viewmodel.UserViewModel
 import com.ddmeng.dribbbleclient.viewmodel.UserViewModelFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlinx.android.synthetic.main.drawer_header.view.login_button
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
