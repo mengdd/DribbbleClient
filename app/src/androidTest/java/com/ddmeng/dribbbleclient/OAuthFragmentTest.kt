@@ -36,12 +36,11 @@ class OAuthFragmentTest {
 
     @Rule
     @JvmField
-    var activityTestRule: ActivityTestRule<SingleFragmentActivity> =  ActivityTestRule<SingleFragmentActivity>(SingleFragmentActivity::class.java, false, true)
+    var activityTestRule: ActivityTestRule<SingleFragmentActivity> = ActivityTestRule<SingleFragmentActivity>(SingleFragmentActivity::class.java, false, true)
 
     @Rule
     @JvmField
     val executorRule = TaskExecutorWithIdlingResourceRule()
-
 
     @Test
     fun testLogin() {
@@ -74,7 +73,6 @@ class OAuthFragmentTest {
 
         onWebView(withId(R.id.webview)).forceJavascriptEnabled()
         onWebView().check(webMatches(getCurrentUrl(), containsString("http://mengdd.github.io/?code=")))
-
 
         assertTrue(oAuthFragment.exit)
         verify(preferencesUtils).saveUserLoggedIn(true)

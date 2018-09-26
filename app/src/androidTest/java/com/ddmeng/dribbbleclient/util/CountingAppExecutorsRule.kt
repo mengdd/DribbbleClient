@@ -20,7 +20,7 @@ import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.IdlingResource
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 

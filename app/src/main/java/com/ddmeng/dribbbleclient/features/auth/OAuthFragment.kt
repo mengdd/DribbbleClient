@@ -39,9 +39,9 @@ class OAuthFragment : Fragment(), Injectable {
     lateinit var oAuthService: OAuthService
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val binding: FragmentAuthBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_auth,
                 container, false)
@@ -71,17 +71,18 @@ class OAuthFragment : Fragment(), Injectable {
                         code, BuildConfig.DRIBBBLE_CALLBACK_URL)
             }
         }.asLiveData().observe(this, Observer {
-                when(it?.status) {
-                    Status.SUCCESS -> {
-                        saveToken(it.data)
-                        exit()
-                    }
-                    Status.ERROR -> {
-                        LogUtils.e("error in getToken")
-                        exit()
-                    }
-                    Status.LOADING -> {}
+            when (it?.status) {
+                Status.SUCCESS -> {
+                    saveToken(it.data)
+                    exit()
                 }
+                Status.ERROR -> {
+                    LogUtils.e("error in getToken")
+                    exit()
+                }
+                Status.LOADING -> {
+                }
+            }
         })
     }
 

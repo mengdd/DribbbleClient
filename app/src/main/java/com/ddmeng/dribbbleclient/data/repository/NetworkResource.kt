@@ -8,7 +8,7 @@ import com.ddmeng.dribbbleclient.data.remote.ApiResponse
 import com.ddmeng.dribbbleclient.data.remote.ApiSuccessResponse
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
 
-abstract class NetworkResource<T>  {
+abstract class NetworkResource<T> {
     private var result = MediatorLiveData<Resource<T>>()
 
     init {

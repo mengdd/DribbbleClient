@@ -38,5 +38,4 @@ class DataBindingIdlingResourceRule(
         IdlingRegistry.getInstance().register(idlingResource)
         super.starting(description)
     }
-
 }
