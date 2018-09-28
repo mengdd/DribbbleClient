@@ -1,6 +1,7 @@
 package com.ddmeng.dribbbleclient
 
 import android.arch.lifecycle.MediatorLiveData
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.web.assertion.WebViewAssertions.webMatches
 import android.support.test.espresso.web.model.Atoms.getCurrentUrl
@@ -18,6 +19,8 @@ import com.ddmeng.dribbbleclient.data.remote.OAuthService
 import com.ddmeng.dribbbleclient.features.auth.OAuthFragment
 import com.ddmeng.dribbbleclient.testing.SingleFragmentActivity
 import com.ddmeng.dribbbleclient.util.TaskExecutorWithIdlingResourceRule
+import com.ddmeng.dribbbleclient.util.createFakeActivityInjector
+import com.ddmeng.dribbbleclient.util.createFakeFragmentInjector
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
@@ -33,10 +36,23 @@ import retrofit2.Response
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class OAuthFragmentTest {
+    private val mockOAuthService = mock(OAuthService::class.java)
+    private val mockPreferenceUtils = mock(PreferencesUtils::class.java)
 
     @Rule
     @JvmField
-    var activityTestRule: ActivityTestRule<SingleFragmentActivity> = ActivityTestRule<SingleFragmentActivity>(SingleFragmentActivity::class.java, false, true)
+    var activityTestRule = object : ActivityTestRule<SingleFragmentActivity>(SingleFragmentActivity::class.java, false, true) {
+        override fun beforeActivityLaunched() {
+            super.beforeActivityLaunched()
+            val app = InstrumentationRegistry.getTargetContext().applicationContext as TestApp
+            app.dispatchingAndroidInjector = createFakeActivityInjector<SingleFragmentActivity> {
+                dispatchingAndroidInjector = createFakeFragmentInjector<TestOAuthFragment> {
+                    preferencesUtils = mockPreferenceUtils
+                    oAuthService = mockOAuthService
+                }
+            }
+        }
+    }
 
     @Rule
     @JvmField
@@ -45,10 +61,6 @@ class OAuthFragmentTest {
     @Test
     fun testLogin() {
         val oAuthFragment = TestOAuthFragment()
-        val preferencesUtils = mock(PreferencesUtils::class.java)
-        val oAuthService = mock(OAuthService::class.java)
-        oAuthFragment.preferencesUtils = preferencesUtils
-        oAuthFragment.oAuthService = oAuthService
         oAuthFragment.cleanCookies()
         activityTestRule.activity.setFragment(oAuthFragment)
 
@@ -58,7 +70,7 @@ class OAuthFragmentTest {
         val apiResponse = ApiResponse.create(Response.success(token))
         response.postValue(apiResponse)
 
-        `when`(oAuthService.getToken(anyString(), anyString(), anyString(), anyString())).thenReturn(response)
+        `when`(mockOAuthService.getToken(anyString(), anyString(), anyString(), anyString())).thenReturn(response)
 
         onWebView(withId(R.id.webview)).forceJavascriptEnabled()
         onWebView().check(webMatches(getCurrentUrl(), containsString("https://dribbble.com/login?")))
@@ -75,8 +87,8 @@ class OAuthFragmentTest {
         onWebView().check(webMatches(getCurrentUrl(), containsString("http://mengdd.github.io/?code=")))
 
         assertTrue(oAuthFragment.exit)
-        verify(preferencesUtils).saveUserLoggedIn(true)
-        verify(preferencesUtils).saveUserToken("token")
+        verify(mockPreferenceUtils).saveUserLoggedIn(true)
+        verify(mockPreferenceUtils).saveUserToken("token")
     }
 
     class TestOAuthFragment : OAuthFragment() {

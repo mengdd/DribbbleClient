@@ -3,11 +3,13 @@ package com.ddmeng.dribbbleclient
 import android.app.Activity
 import android.app.Application
 import com.ddmeng.dribbbleclient.di.AppInjector
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import com.facebook.stetho.Stetho
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
+@OpenForTesting
 class DribbbleApplication : Application(), HasActivityInjector {
 
     @Inject

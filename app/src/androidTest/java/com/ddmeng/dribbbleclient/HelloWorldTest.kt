@@ -31,10 +31,10 @@ class HelloWorldTest {
 
     @Rule
     @JvmField
-    var mActivityRule = object: ActivityTestRule<MainActivity>(MainActivity::class.java) {
+    var mActivityRule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
         override fun beforeActivityLaunched() {
             super.beforeActivityLaunched()
-            val app = InstrumentationRegistry.getTargetContext().applicationContext as DribbbleApplication
+            val app = InstrumentationRegistry.getTargetContext().applicationContext as TestApp
             app.dispatchingAndroidInjector = createFakeActivityInjector<MainActivity> {
                 userViewModelFactory = ViewModelUtil.createFor(viewModel)
                 preferencesUtils = mock(PreferencesUtils::class.java)
