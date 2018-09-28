@@ -1,10 +1,10 @@
 package com.ddmeng.dribbbleclient
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.VisibleForTesting
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
@@ -23,7 +23,6 @@ import com.ddmeng.dribbbleclient.features.home.HomeFragment
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.viewmodel.UserViewModel
-import com.ddmeng.dribbbleclient.viewmodel.UserViewModelFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.drawer_header.view.login_button
@@ -42,10 +41,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var preferencesUtils: PreferencesUtils
     @Inject
-    lateinit var userViewModelFactory: UserViewModelFactory
-    @Inject
-    @VisibleForTesting
-    lateinit var appExecutors: AppExecutors
+    lateinit var userViewModelFactory: ViewModelProvider.Factory
     private lateinit var userViewModel: UserViewModel
     private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 

@@ -1,6 +1,7 @@
 package com.ddmeng.dribbbleclient.di.module
 
 import android.app.Application
+import android.arch.lifecycle.ViewModelProvider
 import com.ddmeng.dribbbleclient.data.local.DribbbleClientDatabase
 import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.repository.UserRepository
@@ -27,7 +28,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideUserViewModelFactory(userRepository: UserRepository, preferencesUtils: PreferencesUtils): UserViewModelFactory {
+    fun provideUserViewModelFactory(userRepository: UserRepository, preferencesUtils: PreferencesUtils): ViewModelProvider.Factory {
         return UserViewModelFactory(userRepository, preferencesUtils)
     }
 }

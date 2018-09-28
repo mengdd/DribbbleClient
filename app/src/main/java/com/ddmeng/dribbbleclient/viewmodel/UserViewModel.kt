@@ -7,8 +7,10 @@ import android.arch.lifecycle.ViewModel
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.repository.UserRepository
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 
+@OpenForTesting
 class UserViewModel constructor(
     private val repository: UserRepository,
     private val preferencesUtils: PreferencesUtils
