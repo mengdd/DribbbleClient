@@ -31,7 +31,7 @@ class HelloWorldTest {
 
     @Rule
     @JvmField
-    var mActivityRule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+    var activityRule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
         override fun beforeActivityLaunched() {
             super.beforeActivityLaunched()
             val app = InstrumentationRegistry.getTargetContext().applicationContext as TestApp
