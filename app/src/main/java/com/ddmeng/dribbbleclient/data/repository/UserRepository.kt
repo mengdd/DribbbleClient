@@ -7,8 +7,6 @@ import com.ddmeng.dribbbleclient.data.local.UserDao
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers.io
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,10 +33,10 @@ class UserRepository @Inject constructor(
     }
 
     fun deleteUser(user: User) {
-        Completable.fromAction {
+        appExecutors.diskIO().execute {
             userDao.delete(user)
             clearCookies()
-        }.subscribeOn(io()).subscribe()
+        }
     }
 
     private fun clearCookies() {

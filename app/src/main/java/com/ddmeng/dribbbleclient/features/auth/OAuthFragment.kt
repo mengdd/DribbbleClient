@@ -1,13 +1,17 @@
 package com.ddmeng.dribbbleclient.features.auth
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.ddmeng.dribbbleclient.BuildConfig
@@ -15,14 +19,18 @@ import com.ddmeng.dribbbleclient.MainActivity
 import com.ddmeng.dribbbleclient.R
 import com.ddmeng.dribbbleclient.data.model.OAuthToken
 import com.ddmeng.dribbbleclient.data.remote.ApiConstants
+import com.ddmeng.dribbbleclient.data.remote.ApiResponse
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
+import com.ddmeng.dribbbleclient.data.repository.NetworkResource
+import com.ddmeng.dribbbleclient.data.valueobject.Status
 import com.ddmeng.dribbbleclient.databinding.FragmentAuthBinding
 import com.ddmeng.dribbbleclient.di.Injectable
+import com.ddmeng.dribbbleclient.testing.OpenForTesting
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
-import com.ddmeng.dribbbleclient.utils.singleIoToUi
 import javax.inject.Inject
 
+@OpenForTesting
 class OAuthFragment : Fragment(), Injectable {
     private lateinit var webview: WebView
     @Inject
@@ -52,27 +60,45 @@ class OAuthFragment : Fragment(), Injectable {
         return binding.root
     }
 
+    @VisibleForTesting
     @SuppressLint("CheckResult")
-    private fun getToken(code: String) {
+    fun getToken(code: String) {
         LogUtils.i("getToken with code: $code")
-        oAuthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID, BuildConfig.DRIBBBLE_CLIENT_SECRET,
-                code, BuildConfig.DRIBBBLE_CALLBACK_URL)
-                .compose(singleIoToUi())
-                .subscribe({ token ->
-                    saveToken(token)
+        object : NetworkResource<OAuthToken>() {
+            override fun createCall(): LiveData<ApiResponse<OAuthToken>> {
+                return oAuthService.getToken(BuildConfig.DRIBBBLE_CLIENT_ID,
+                        BuildConfig.DRIBBBLE_CLIENT_SECRET,
+                        code, BuildConfig.DRIBBBLE_CALLBACK_URL)
+            }
+        }.asLiveData().observe(this, Observer {
+            when (it?.status) {
+                Status.SUCCESS -> {
+                    saveToken(it.data)
                     exit()
-                }, {
-                    LogUtils.e("error in getToken", it)
+                }
+                Status.ERROR -> {
+                    LogUtils.e("error in getToken")
                     exit()
-                })
+                }
+                Status.LOADING -> {
+                }
+            }
+        })
     }
 
-    private fun saveToken(oauthToken: OAuthToken) {
+    private fun saveToken(oauthToken: OAuthToken?) {
+        LogUtils.i("save token ${oauthToken?.accessToken}")
         preferencesUtils.saveUserLoggedIn(true)
-        preferencesUtils.saveUserToken(oauthToken.accessToken)
+        preferencesUtils.saveUserToken(oauthToken?.accessToken)
     }
 
-    private fun exit() {
+    @VisibleForTesting
+    fun exit() {
         (activity as MainActivity).showHomeFragment()
+    }
+
+    @VisibleForTesting
+    fun cleanCookies() {
+        CookieManager.getInstance().removeAllCookie()
     }
 }

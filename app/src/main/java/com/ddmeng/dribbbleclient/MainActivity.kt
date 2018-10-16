@@ -1,6 +1,7 @@
 package com.ddmeng.dribbbleclient
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -22,10 +23,9 @@ import com.ddmeng.dribbbleclient.features.home.HomeFragment
 import com.ddmeng.dribbbleclient.utils.LogUtils
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.viewmodel.UserViewModel
-import com.ddmeng.dribbbleclient.viewmodel.UserViewModelFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlinx.android.synthetic.main.drawer_header.view.login_button
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var preferencesUtils: PreferencesUtils
     @Inject
-    lateinit var userViewModelFactory: UserViewModelFactory
+    lateinit var userViewModelFactory: ViewModelProvider.Factory
     private lateinit var userViewModel: UserViewModel
     private lateinit var drawerHeaderBinding: DrawerHeaderBinding
 

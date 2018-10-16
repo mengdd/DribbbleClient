@@ -1,7 +1,7 @@
 package com.ddmeng.dribbbleclient.data.remote
 
+import android.arch.lifecycle.LiveData
 import com.ddmeng.dribbbleclient.data.model.OAuthToken
-import io.reactivex.Single
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -12,5 +12,5 @@ interface OAuthService {
         @Query("client_secret") clientSecret: String,
         @Query("code") code: String,
         @Query("redirect_url") redirectUrl: String
-    ): Single<OAuthToken>
+    ): LiveData<ApiResponse<OAuthToken>>
 }

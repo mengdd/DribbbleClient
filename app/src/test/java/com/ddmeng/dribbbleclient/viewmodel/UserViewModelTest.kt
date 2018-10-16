@@ -1,18 +1,18 @@
 package com.ddmeng.dribbbleclient.viewmodel
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.ddmeng.dribbbleclient.data.model.User
 import com.ddmeng.dribbbleclient.data.repository.UserRepository
 import com.ddmeng.dribbbleclient.data.valueobject.Resource
-import com.ddmeng.dribbbleclient.utils.ImmediateSchedulerRule
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import com.ddmeng.dribbbleclient.utils.TestUtil
 import com.ddmeng.dribbbleclient.utils.mock
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
-import org.junit.ClassRule
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.Mock
@@ -33,11 +33,9 @@ class UserViewModelTest {
         userViewModel = UserViewModel(userRepository, preferencesUtils)
     }
 
-    companion object {
-        @ClassRule
-        @JvmField
-        val schedulers = ImmediateSchedulerRule()
-    }
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun testNull() {
