@@ -12,6 +12,7 @@ allOpen {
 
 android {
     compileSdkVersion 27
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.ddmeng.dribbbleclient"
         minSdkVersion 19
