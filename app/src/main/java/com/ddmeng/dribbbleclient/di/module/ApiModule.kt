@@ -2,6 +2,7 @@ package com.ddmeng.dribbbleclient.di.module
 
 import com.ddmeng.dribbbleclient.data.remote.AuthInterceptor
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
+import com.ddmeng.dribbbleclient.data.remote.ShotService
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.utils.LiveDataCallAdapterFactory
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
@@ -87,6 +88,12 @@ class ApiModule {
     @Provides
     fun provideUserApiService(@Named("shotRetrofit") retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideShotService(@Named("shotRetrofit") retrofit: Retrofit): ShotService {
+        return retrofit.create(ShotService::class.java)
     }
 
     @Singleton

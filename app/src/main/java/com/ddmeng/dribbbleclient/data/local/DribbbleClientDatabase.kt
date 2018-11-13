@@ -4,11 +4,14 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.ddmeng.dribbbleclient.data.model.Shot
 import com.ddmeng.dribbbleclient.data.model.User
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class, Shot::class],
+        version = 1)
 abstract class DribbbleClientDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun shotDao(): ShotDao
 
     companion object {
         @Volatile
