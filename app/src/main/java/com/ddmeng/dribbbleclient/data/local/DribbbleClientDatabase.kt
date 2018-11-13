@@ -26,7 +26,9 @@ abstract class DribbbleClientDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): DribbbleClientDatabase {
             return Room.databaseBuilder(context.applicationContext,
-                    DribbbleClientDatabase::class.java, DATABASE_NAME).build()
+                    DribbbleClientDatabase::class.java, DATABASE_NAME)
+                    .fallbackToDestructiveMigration() // TODO consider proper db migration once released
+                    .build()
         }
     }
 }
