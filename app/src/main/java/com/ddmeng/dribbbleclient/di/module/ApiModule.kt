@@ -2,12 +2,14 @@ package com.ddmeng.dribbbleclient.di.module
 
 import com.ddmeng.dribbbleclient.data.remote.AuthInterceptor
 import com.ddmeng.dribbbleclient.data.remote.OAuthService
+import com.ddmeng.dribbbleclient.data.remote.ShotService
 import com.ddmeng.dribbbleclient.data.remote.UserService
 import com.ddmeng.dribbbleclient.utils.LiveDataCallAdapterFactory
 import com.ddmeng.dribbbleclient.utils.PreferencesUtils
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -37,6 +39,14 @@ class ApiModule {
 
     @Singleton
     @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.HEADERS
+        return httpLoggingInterceptor
+    }
+
+    @Singleton
+    @Provides
     fun provideOkHttpBuilder(): OkHttpClient.Builder {
         val okHttpBuilder = OkHttpClient.Builder()
         return okHttpBuilder.apply {
@@ -52,9 +62,13 @@ class ApiModule {
         retrofitBuilder: Retrofit.Builder,
         okHttpClientBuilder: OkHttpClient.Builder,
         interceptor: AuthInterceptor,
+        httpLoggingInterceptor: HttpLoggingInterceptor,
         @Named("shotEndpoint") baseUrl: String
     ): Retrofit {
-        val client = okHttpClientBuilder.addInterceptor(interceptor).build()
+        val client = okHttpClientBuilder
+                .addInterceptor(interceptor)
+                .addInterceptor(httpLoggingInterceptor)
+                .build()
         return retrofitBuilder
                 .client(client)
                 .baseUrl(baseUrl)
@@ -67,10 +81,14 @@ class ApiModule {
     fun provideUserRetrofit(
         retrofitBuilder: Retrofit.Builder,
         okHttpClientBuilder: OkHttpClient.Builder,
+        httpLoggingInterceptor: HttpLoggingInterceptor,
         @Named("authEndpoint") baseUrl: String
     ): Retrofit {
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+        val okHttpClient = okHttpClientBuilder
+                .addInterceptor(httpLoggingInterceptor).build()
         return retrofitBuilder
-                .client(okHttpClientBuilder.build())
+                .client(okHttpClient)
                 .baseUrl(baseUrl)
                 .build()
     }
@@ -87,6 +105,12 @@ class ApiModule {
     @Provides
     fun provideUserApiService(@Named("shotRetrofit") retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideShotService(@Named("shotRetrofit") retrofit: Retrofit): ShotService {
+        return retrofit.create(ShotService::class.java)
     }
 
     @Singleton
