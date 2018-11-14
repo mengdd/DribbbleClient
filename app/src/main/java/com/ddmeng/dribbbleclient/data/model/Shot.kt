@@ -30,34 +30,63 @@ data class Shot(
     @Expose
     @Ignore
     var images: Images? = null,
-    @SerializedName("published_at")
+    @SerializedName("views_count")
     @Expose
-    var publishedAt: String? = null,
+    var viewsCount: Int? = null,
+    @SerializedName("likes_count")
+    @Expose
+    var likesCount: Int? = null,
+    @SerializedName("comments_count")
+    @Expose
+    var commentsCount: Int? = null,
+    @SerializedName("attachments_count")
+    @Expose
+    var attachmentsCount: Int? = null,
+    @SerializedName("rebounds_count")
+    @Expose
+    var reboundsCount: Int? = null,
+    @SerializedName("buckets_count")
+    @Expose
+    var bucketsCount: Int? = null,
+    @SerializedName("created_at")
+    @Expose
+    var createdAt: String? = null,
     @SerializedName("updated_at")
     @Expose
     var updatedAt: String? = null,
     @SerializedName("html_url")
     @Expose
     var htmlUrl: String? = null,
+    @SerializedName("attachments_url")
+    @Expose
+    var attachmentsUrl: String? = null,
+    @SerializedName("buckets_url")
+    @Expose
+    var bucketsUrl: String? = null,
+    @SerializedName("comments_url")
+    @Expose
+    var commentsUrl: String? = null,
+    @SerializedName("likes_url")
+    @Expose
+    var likesUrl: String? = null,
+    @SerializedName("projects_url")
+    @Expose
+    var projectsUrl: String? = null,
+    @SerializedName("rebounds_url")
+    @Expose
+    var reboundsUrl: String? = null,
     @SerializedName("animated")
     @Expose
     var animated: Boolean? = null,
     @SerializedName("tags")
     @Expose
     var tags: List<String>? = null,
-    @SerializedName("attachments")
+    @SerializedName("user")
     @Expose
     @Ignore
-    var attachments: List<Attachment>? = null,
-    @SerializedName("projects")
-    @Expose
-    @Ignore
-    var projects: List<Project>? = null,
+    var user: User? = null,
     @SerializedName("team")
     @Expose
     @Ignore
-    var team: Team? = null,
-    @SerializedName("low_profile")
-    @Expose
-    var lowProfile: Boolean? = null
+    var team: Team? = null
 )

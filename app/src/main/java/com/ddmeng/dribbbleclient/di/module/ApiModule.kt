@@ -20,7 +20,7 @@ import javax.inject.Singleton
 class ApiModule {
     companion object {
         const val OAUTH_BASE_URL = "https://dribbble.com/oauth/"
-        const val API_BASE_URL = "https://api.dribbble.com/v2/"
+        const val API_BASE_URL = "https://api.dribbble.com/v1/"
     }
 
     @Singleton
