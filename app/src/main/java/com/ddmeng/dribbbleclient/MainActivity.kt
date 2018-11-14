@@ -1,7 +1,6 @@
 package com.ddmeng.dribbbleclient
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -28,7 +27,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.drawer_header.view.login_button
 import javax.inject.Inject
-import javax.inject.Named
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 

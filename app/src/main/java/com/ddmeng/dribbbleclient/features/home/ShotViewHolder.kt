@@ -7,7 +7,6 @@ import com.ddmeng.dribbbleclient.databinding.ShotItemLayoutBinding
 class ShotViewHolder(private val itemLayoutBinding: ShotItemLayoutBinding) :
         RecyclerView.ViewHolder(itemLayoutBinding.root) {
 
-
     fun bind(shot: Shot) {
         itemLayoutBinding.title.text = shot.title
         itemLayoutBinding.executePendingBindings()
