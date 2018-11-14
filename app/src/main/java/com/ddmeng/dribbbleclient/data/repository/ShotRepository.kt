@@ -30,7 +30,7 @@ class ShotRepository @Inject constructor(
             }
 
             override fun createCall(): LiveData<ApiResponse<List<Shot>>> {
-                return shotService.getUserShots()
+                return shotService.getPopularShots()
             }
         }.asLiveData()
     }
